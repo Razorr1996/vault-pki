@@ -5,4 +5,4 @@ set -euo pipefail
 
 KUBECTL="kubectl --context minikube --namespace vault"
 
-$KUBECTL exec vault-0 -- vault operator unseal "$VAULT_UNSEAL_KEY"
+$KUBECTL port-forward services/vault 8200:http
