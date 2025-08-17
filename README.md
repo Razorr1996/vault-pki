@@ -6,6 +6,7 @@
 2. tgenv/terragrunt
 3. tfenv/terraform
 4. jq
+5. vault
 
 Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki/pki-engine-external-ca
 
@@ -42,7 +43,7 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
    )
    ```
 
-1. Generate Root CA and sign Intermediate CA1 for Vault:
+1. Generate Root CA and sign `Intermediate CA1 v1` for Vault:
    ```shell
    ./scripts/02_certificates.sh
    ```
@@ -53,4 +54,12 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
      cd terraform/vault
      terragrunt apply
    )
+   ```
+
+1. Test signed certificate from Vault `Intermediate CA2 v1.1`:
+   ```shell
+   export VAULT_ADDR=http://localhost:8200
+   export VAULT_TOKEN=$(cat out/cluster-keys.json | jq -r ".root_token")
+   vault write -format=json test-org/v1/ica2/v1/issue/test-dot-com-subdomain \
+   common_name=1.test.com | jq .data.certificate -r | openssl x509 -in /dev/stdin -text -noout
    ```
