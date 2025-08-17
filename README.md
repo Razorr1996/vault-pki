@@ -24,33 +24,33 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
    )
    ```
 
-1. Init vault:
+1. Init Vault:
    ```shell
    ./scripts/01_vault.sh
    ```
 
-1. Run port-forwarding to vault in a separate terminal:
+1. Run port-forwarding to Vault in a separate terminal:
    ```shell
    ./scripts/90_port_forward.sh
    ```
 
-1. Apply init vault configuration:
+1. Apply init Vault configuration:
    ```shell
    (
-     cd terraform/base
+     cd terraform/vault
      terragrunt apply -var signed=false
    )
    ```
 
-1. Generate Root CA and sign Intermediate CA1:
+1. Generate Root CA and sign Intermediate CA1 for Vault:
    ```shell
    ./scripts/02_certificates.sh
    ```
 
-1. Apply the remaining vault terraform config:
+1. Apply the remaining Vault terraform config:
    ```shell
    (
-     cd terraform/base
+     cd terraform/vault
      terragrunt apply
    )
    ```
