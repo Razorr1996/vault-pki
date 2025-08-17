@@ -39,7 +39,7 @@ resource "vault_pki_secret_backend_intermediate_cert_request" "test_org_v1_ica1_
   organization = "Basa62"
   country      = "RS"
   locality     = "Company1"
-  province     = "GB"
+  province     = "BG"
 }
 
 resource "local_file" "test_org_v1_ica1_v1_csr" {
