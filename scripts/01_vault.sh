@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+# set -x # print cmd
+
+source ./.common.sh
+
+KUBECTL="kubectl --context minikube --namespace vault"
+
+CLUSTER_KEYS_JSON="$OUT_DIR/cluster-keys.json"
+
+$KUBECTL exec vault-0 -- \
+    vault operator init \
+    -key-shares=1 \
+    -key-threshold=1 \
+    -format=json > "$CLUSTER_KEYS_JSON"
+
+VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" "$CLUSTER_KEYS_JSON")
+
+$KUBECTL exec vault-0 -- vault operator unseal "$VAULT_UNSEAL_KEY"
+
+$KUBECTL exec -ti vault-1 -- vault operator raft join "http://vault-0.vault-internal:8200"
+$KUBECTL exec -ti vault-2 -- vault operator raft join "http://vault-0.vault-internal:8200"
+
+$KUBECTL exec -ti vault-1 -- vault operator unseal "$VAULT_UNSEAL_KEY"
+$KUBECTL exec -ti vault-2 -- vault operator unseal "$VAULT_UNSEAL_KEY"
