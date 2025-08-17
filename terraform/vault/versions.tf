@@ -16,6 +16,6 @@ terraform {
 }
 
 provider "vault" {
-  token = local.vault_cluster_keys.root_token
+  token   = local.vault_cluster_keys.root_token
   address = "http://localhost:8200"
 }

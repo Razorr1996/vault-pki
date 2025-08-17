@@ -7,6 +7,8 @@
 3. tfenv/terraform
 4. jq
 
+Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki/pki-engine-external-ca
+
 ## Installation
 
 1. Initialize minikube
