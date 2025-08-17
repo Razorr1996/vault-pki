@@ -1,4 +1,7 @@
 # Vault PKI playground
+Build a certificate authority (CA) in Vault with an offline root.
+
+Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki/pki-engine-external-ca
 
 # Prerequisites
 
@@ -7,8 +10,6 @@
 3. tfenv/terraform
 4. jq
 5. vault
-
-Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki/pki-engine-external-ca
 
 ## Installation
 
