@@ -69,5 +69,9 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
 
 1. Delete generated vault secrets and certificates
    ```shell
-   rm ./scripts/*
+   (
+     cd terraform
+     terragrunt run-all destroy -auto-approve
+   )
+   rm ./out/*
    ```
