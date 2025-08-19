@@ -22,7 +22,7 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
    ```shell
    (
      cd terraform/base
-     terragrunt apply
+     terragrunt apply -auto-approve
    )
    ```
 
@@ -40,7 +40,7 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
    ```shell
    (
      cd terraform/vault
-     terragrunt apply -var signed=false
+     terragrunt apply -auto-approve -var signed=false
    )
    ```
 
@@ -53,7 +53,7 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
    ```shell
    (
      cd terraform/vault
-     terragrunt apply
+     terragrunt apply -auto-approve
    )
    ```
 
@@ -63,4 +63,11 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
    export VAULT_TOKEN=$(cat out/cluster-keys.json | jq -r ".root_token")
    vault write -format=json test-org/v1/ica2/v1/issue/test-dot-com-subdomain \
    common_name=1.test.com | jq .data.certificate -r | openssl x509 -in /dev/stdin -text -noout
+   ```
+
+# Cleanup
+
+1. Delete generated vault secrets and certificates
+   ```shell
+   rm ./scripts/*
    ```
