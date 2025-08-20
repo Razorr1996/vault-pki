@@ -69,11 +69,8 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
 
 1. Delete generated vault secrets and certificates
    ```shell
-   (
-     cd terraform
-     terragrunt run-all destroy -auto-approve
-   )
-   rm ./out/*
    minikube delete -p vault-pki
-   docker network rm vault-pki
+   docker network rm vault-pki || true
+   find ./terraform -type d -name .terraform -exec rm -rv {} \;
+   rm -f ./out/*
    ```
