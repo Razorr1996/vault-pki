@@ -20,7 +20,10 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
 
 1. Apply base terraform:
    ```shell
-   terragrunt apply -chdir=terraform/base -auto-approve
+   (
+     cd terraform/base
+     terragrunt apply -auto-approve
+   )
    ```
 
 1. Init Vault:
@@ -35,7 +38,10 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
 
 1. Apply init Vault configuration:
    ```shell
-   terragrunt apply -chdir=terraform/vault -auto-approve -var signed=false
+   (
+     cd terraform/vault
+     terragrunt apply -auto-approve -var signed=false
+   )
    ```
 
 1. Generate Root CA and sign `Intermediate CA1 v1` for Vault:
@@ -45,7 +51,10 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
 
 1. Apply the remaining Vault terraform config:
    ```shell
-   terragrunt apply -chdir=terraform/vault -auto-approve
+   (
+     cd terraform/vault
+     terragrunt apply -auto-approve
+   )
    ```
 
 1. Test signed certificate from Vault `Intermediate CA2 v1.1`:
@@ -60,7 +69,10 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
 
 1. Delete generated vault secrets and certificates
    ```shell
-   terragrunt run-all destroy -auto-approve
+   (
+     cd terraform
+     terragrunt run-all destroy -auto-approve
+   )
    rm ./out/*
    minikube delete -p vault-pki
    docker network rm vault-pki
