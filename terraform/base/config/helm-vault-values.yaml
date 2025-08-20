@@ -9,6 +9,7 @@ server:
       enabled: true
       setNodeId: true
       config: |
+        ui = true
         cluster_name = "vault-integrated-storage"
         storage "raft" {
            path    = "/vault/data/"
