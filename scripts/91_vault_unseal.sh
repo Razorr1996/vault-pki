@@ -10,18 +10,8 @@ KUBECTL="kubectl --context vault-pki --namespace vault"
 
 CLUSTER_KEYS_JSON="$OUT_DIR/cluster-keys.json"
 
-$KUBECTL exec vault-0 -- \
-    vault operator init \
-    -key-shares=1 \
-    -key-threshold=1 \
-    -format=json > "$CLUSTER_KEYS_JSON"
-
 VAULT_UNSEAL_KEY=$(jq -r ".unseal_keys_b64[]" "$CLUSTER_KEYS_JSON")
 
 $KUBECTL exec vault-0 -- vault operator unseal "$VAULT_UNSEAL_KEY"
-
-$KUBECTL exec vault-1 -- vault operator raft join "http://vault-0.vault-internal:8200"
-$KUBECTL exec vault-2 -- vault operator raft join "http://vault-0.vault-internal:8200"
-
 $KUBECTL exec vault-1 -- vault operator unseal "$VAULT_UNSEAL_KEY"
 $KUBECTL exec vault-2 -- vault operator unseal "$VAULT_UNSEAL_KEY"

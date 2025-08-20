@@ -65,6 +65,14 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
    common_name=1.test.com | jq .data.certificate -r | openssl x509 -in /dev/stdin -text -noout
    ```
 
+# Continue after restart vault pods
+
+1. Run unseal:
+   ```shell
+   ./scripts/91_vault_unseal.sh
+   ```
+
+
 # Cleanup
 
 1. Delete generated vault secrets and certificates
