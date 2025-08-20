@@ -3,7 +3,7 @@ terraform {
   backend "kubernetes" {
     secret_suffix  = "base"
     config_path    = "~/.kube/config"
-    config_context = "minikube"
+    config_context = "vault-pki"
     namespace      = "terraform"
   }
 }

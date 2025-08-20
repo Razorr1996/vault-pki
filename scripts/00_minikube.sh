@@ -3,6 +3,6 @@
 set -euo pipefail
 # set -x # print cmd
 
-minikube start
+minikube start -p vault-pki
 
-kubectl --context minikube create ns terraform
+kubectl --context vault-pki create ns terraform
