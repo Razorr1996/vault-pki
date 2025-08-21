@@ -18,7 +18,7 @@ locals {
 }
 
 resource "vault_mount" "test_org_v1_ica1_v1" {
-  path                      = "test-org/v1/ica1/v1"
+  path                      = "pki/test-org/v1/ica1/v1"
   type                      = "pki"
   description               = "PKI engine hosting intermediate CA1 v1 for test org"
   default_lease_ttl_seconds = local.default_1hr_in_sec
@@ -59,7 +59,7 @@ resource "vault_pki_secret_backend_intermediate_set_signed" "test_org_v1_ica1_v1
 ###
 
 resource "vault_mount" "test_org_v1_ica2_v1" {
-  path                      = "test-org/v1/ica2/v1"
+  path                      = "pki/test-org/v1/ica2/v1"
   type                      = "pki"
   description               = "PKI engine hosting intermediate CA2 v1 for test org"
   default_lease_ttl_seconds = local.default_1hr_in_sec
@@ -135,7 +135,6 @@ resource "vault_pki_secret_backend_role" "role" {
   allow_subdomains   = true
   server_flag        = false
   client_flag        = true
-  no_store           = true
   country            = ["RS"]
   locality           = ["Company1"]
   province           = ["BG"]

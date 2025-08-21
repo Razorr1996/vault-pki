@@ -1,7 +1,10 @@
 # Vault PKI playground
-Build a certificate authority (CA) in Vault with an offline root.
+Use cert-manager and Vault Issuer in Kubernetes with an offline root CA.
 
-Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki/pki-engine-external-ca
+Docs:
+- [Build a certificate authority (CA) in Vault with an offline root](https://developer.hashicorp.com/vault/tutorials/pki/pki-engine-external-ca)
+- [Configure Vault as a certificate manager in Kubernetes with Helm](https://developer.hashicorp.com/vault/tutorials/archive/kubernetes-cert-manager)
+- [cert-manager Vault Kubernetes auth](https://cert-manager.io/docs/configuration/vault/#option-2-vault-authentication-method-use-kubernetes-auth)
 
 # Prerequisites
 
@@ -61,11 +64,11 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
    ```shell
    export VAULT_ADDR=http://localhost:8200
    export VAULT_TOKEN=$(cat out/cluster-keys.json | jq -r ".root_token")
-   vault write -format=json test-org/v1/ica2/v1/issue/test-dot-com-subdomain \
+   vault write -format=json pki/test-org/v1/ica2/v1/issue/test-dot-com-subdomain \
    common_name=1.test.com | jq .data.certificate -r | openssl x509 -in /dev/stdin -text -noout
    ```
 
-# Continue after restart vault pods
+# Continue after restart Vault pods
 
 1. Run unseal:
    ```shell
@@ -75,7 +78,7 @@ Original doc from Hashicorp: https://developer.hashicorp.com/vault/tutorials/pki
 
 # Cleanup
 
-1. Delete generated vault secrets and certificates
+1. Delete generated Vault secrets and certificates
    ```shell
    minikube delete -p vault-pki
    docker network rm vault-pki || true
