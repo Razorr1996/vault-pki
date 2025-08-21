@@ -1,8 +1,8 @@
 resource "helm_release" "vault" {
   name       = "vault"
-  repository = "https://helm.releases.hashicorp.com"
-  chart      = "vault"
-  version    = "0.30.1"
+  repository = var.vault_chart_from_github ? null : "https://helm.releases.hashicorp.com"
+  chart      = var.vault_chart_from_github ? "https://github.com/hashicorp/vault-helm/archive/refs/tags/v0.30.1.tar.gz" : "vault"
+  version    = var.vault_chart_from_github ? null : "0.30.1"
 
   namespace        = "vault"
   create_namespace = true
