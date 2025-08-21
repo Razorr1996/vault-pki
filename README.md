@@ -8,11 +8,12 @@ Docs:
 
 # Prerequisites
 
-1. minikube
-2. tgenv/terragrunt
-3. tfenv/terraform
-4. jq
-5. vault
+1. [minikube](https://minikube.sigs.k8s.io/docs/start/)
+2. [tgenv](https://formulae.brew.sh/formula/tgenv)/terragrunt
+3. [tfenv](https://github.com/tfutils/tfenv?tab=readme-ov-file#installation)/terraform
+4. [jq](https://jqlang.org/download/)
+5. [certstrap](https://formulae.brew.sh/formula/certstrap)
+6. [vault](https://developer.hashicorp.com/vault/tutorials/get-started/install-binary#install-vault) (optional for local testing requests)
 
 ## Installation
 
