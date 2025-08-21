@@ -14,7 +14,7 @@ certstrap --depot-path="$OUT_DIR" init \
     --country "RS" \
     --province "BG" \
     --locality "Company1" \
-    --path-length "2" \
+    --exclude-path-length \
     --common-name "Testing Root"
 
 certstrap --depot-path="$OUT_DIR" sign \
