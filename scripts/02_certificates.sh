@@ -18,7 +18,7 @@ certstrap --depot-path="$OUT_DIR" init \
     --common-name "Testing Root"
 
 certstrap --depot-path="$OUT_DIR" sign \
-    --expires "3 year" \
+    --expires "1 year" \
     --csr "$OUT_DIR/Intermediate_CA1_v1.csr" \
     --cert "$OUT_DIR/Intermediate_CA1_v1.crt" \
     --intermediate \

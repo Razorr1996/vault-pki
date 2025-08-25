@@ -56,13 +56,35 @@ resource "vault_pki_secret_backend_intermediate_set_signed" "test_org_v1_ica1_v1
   certificate = local.test_org_v1_ica1_v1_chain
 }
 
+resource "vault_pki_secret_backend_issuer" "test_org_v1_ica1_v1" {
+  count = local.count_signed
+
+  backend    = vault_pki_secret_backend_intermediate_set_signed.test_org_v1_ica1_v1_signed_cert[0].backend
+  issuer_ref = vault_pki_secret_backend_intermediate_set_signed.test_org_v1_ica1_v1_signed_cert[0].imported_issuers[0]
+
+  leaf_not_after_behavior = "truncate"
+}
+
+resource "vault_pki_secret_backend_config_issuers" "test_org_v1_ica1_v1" {
+  count = local.count_signed
+
+  backend = vault_pki_secret_backend_intermediate_set_signed.test_org_v1_ica1_v1_signed_cert[0].backend
+  default = vault_pki_secret_backend_issuer.test_org_v1_ica1_v1[0].issuer_id
+
+  default_follows_latest_issuer = false
+}
+
+output "debug_test_org_v1_ica1_v1" {
+  value = var.signed ? vault_pki_secret_backend_intermediate_set_signed.test_org_v1_ica1_v1_signed_cert[0].imported_issuers : ["Empty debug output"]
+}
+
 ###
 
 resource "vault_mount" "test_org_v1_ica2_v1" {
   path                      = "pki/test-org/v1/ica2/v1"
   type                      = "pki"
   description               = "PKI engine hosting intermediate CA2 v1 for test org"
-  default_lease_ttl_seconds = local.default_1hr_in_sec
+  default_lease_ttl_seconds = local.default_1y_in_sec
   max_lease_ttl_seconds     = local.default_1y_in_sec
 }
 
@@ -87,7 +109,8 @@ resource "vault_pki_secret_backend_root_sign_intermediate" "test_org_v1_sign_ica
   depends_on = [
     vault_mount.test_org_v1_ica1_v1,
     vault_pki_secret_backend_intermediate_cert_request.test_org_v1_ica2_v1,
-    vault_pki_secret_backend_intermediate_set_signed.test_org_v1_ica1_v1_signed_cert[0]
+    vault_pki_secret_backend_intermediate_set_signed.test_org_v1_ica1_v1_signed_cert[0],
+    vault_pki_secret_backend_config_issuers.test_org_v1_ica1_v1[0],
   ]
 
   backend              = vault_mount.test_org_v1_ica1_v1.path
@@ -114,6 +137,28 @@ resource "vault_pki_secret_backend_intermediate_set_signed" "test_org_v1_ica2_v1
   certificate = local.test_org_v1_ica2_v1_chain
 }
 
+resource "vault_pki_secret_backend_issuer" "test_org_v1_ica2_v1" {
+  count = local.count_signed
+
+  backend    = vault_pki_secret_backend_intermediate_set_signed.test_org_v1_ica2_v1_signed_cert[0].backend
+  issuer_ref = vault_pki_secret_backend_intermediate_set_signed.test_org_v1_ica2_v1_signed_cert[0].imported_issuers[0]
+
+  leaf_not_after_behavior = "truncate"
+}
+
+resource "vault_pki_secret_backend_config_issuers" "test_org_v1_ica2_v1" {
+  count = local.count_signed
+
+  backend = vault_pki_secret_backend_intermediate_set_signed.test_org_v1_ica2_v1_signed_cert[0].backend
+  default = vault_pki_secret_backend_issuer.test_org_v1_ica2_v1[0].issuer_id
+
+  default_follows_latest_issuer = false
+}
+
+output "debug_test_org_v1_ica2_v1" {
+  value = var.signed ? vault_pki_secret_backend_intermediate_set_signed.test_org_v1_ica2_v1_signed_cert[0].imported_issuers : ["Empty debug output"]
+}
+
 ###
 
 resource "vault_pki_secret_backend_role" "role" {
@@ -123,7 +168,6 @@ resource "vault_pki_secret_backend_role" "role" {
 
   backend            = vault_mount.test_org_v1_ica2_v1.path
   name               = "test-dot-com-subdomain"
-  ttl                = local.default_1hr_in_sec
   allow_ip_sans      = true
   key_type           = "rsa"
   key_bits           = 2048
