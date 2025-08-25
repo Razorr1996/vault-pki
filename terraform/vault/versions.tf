@@ -8,11 +8,11 @@ terraform {
   required_providers {
     vault = {
       source  = "hashicorp/vault"
-      version = ">=5.1"
+      version = ">= 5.2.1"
     }
     local = {
       source  = "hashicorp/local"
-      version = ">=2.5"
+      version = ">= 2.5.3"
     }
   }
 }
