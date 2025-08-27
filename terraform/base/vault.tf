@@ -4,13 +4,14 @@ locals {
       enabled = false
     }
     server = {
+      logLevel = "trace"
       affinity = ""
       ha = {
         enabled = true
         raft = {
           enabled   = true
           setNodeId = true
-          config = <<-EOF
+          config    = <<-EOF
             ui = true
             cluster_name = "vault-integrated-storage"
             storage "raft" {

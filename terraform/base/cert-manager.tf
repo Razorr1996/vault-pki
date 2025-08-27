@@ -3,6 +3,9 @@ locals {
     crds = {
       enabled = true
     }
+    global = {
+      logLevel = 6
+    }
   }
 }
 
