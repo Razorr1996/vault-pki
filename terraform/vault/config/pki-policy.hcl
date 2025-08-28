@@ -5,14 +5,14 @@ path "pki*" {
   ]
 }
 
-path "pki/test-org/v1/ica2/v*/sign/example-dot-com" {
+path "pki/test-org/v1/ica2/v1/sign/test-dot-com-subdomain" {
   capabilities = [
     "create",
     "update",
   ]
 }
 
-path "pki/test-org/v1/ica2/v*/issue/example-dot-com" {
+path "pki/test-org/v1/ica2/v1/issue/test-dot-com-subdomain" {
   capabilities = [
     "create",
   ]

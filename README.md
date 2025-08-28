@@ -31,7 +31,7 @@ Docs:
 
 1. Init Vault:
    ```shell
-   ./scripts/01_vault.sh
+   ./scripts/01_vault_init_unseal.sh
    ```
 
 1. Run port-forwarding to Vault in a separate terminal:
@@ -63,9 +63,17 @@ Docs:
 1. Test signed certificate from Vault `Intermediate CA2 v1.1`:
    ```shell
    export VAULT_ADDR=http://localhost:8200
-   export VAULT_TOKEN=$(cat out/cluster-keys.json | jq -r ".root_token")
+   export VAULT_TOKEN=$(./scripts/92_vault_root_token.sh)
    vault write -format=json pki/test-org/v1/ica2/v1/issue/test-dot-com-subdomain \
    common_name=1.test.com | jq .data.certificate -r | openssl x509 -in /dev/stdin -text -noout
+   ```
+
+1. Apply cert-manager ClusterIssuer:
+   ```shell
+   (
+     cd terraform/cert-manager
+     terragrunt apply -auto-approve
+   )
    ```
 
 # Continue after restart Vault pods

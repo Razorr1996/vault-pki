@@ -20,7 +20,7 @@ resource "kubernetes_manifest" "cluster_issuer_vault_issuer" {
     spec = {
       vault = {
         server = "http://vault.vault:8200"
-        path   = "v1/pki/test-org/v1/ica2/v1/sign/test-dot-com-subdomain"
+        path   = "pki/test-org/v1/ica2/v1/sign/test-dot-com-subdomain"
         auth = {
           kubernetes = {
             role = "cert-manager"
@@ -64,5 +64,30 @@ resource "kubernetes_role_binding_v1" "allow_sa_token_requests_cert_manager" {
     kind      = "ServiceAccount"
     name      = "cert-manager"
     namespace = local.namespace
+  }
+}
+
+# Certificate
+
+resource "kubernetes_manifest" "certificate" {
+  manifest = {
+    apiVersion = "cert-manager.io/v1"
+    kind = "Certificate"
+    metadata = {
+      name = "basa62-test-com"
+      namespace = "default"
+    }
+    spec = {
+      secretName = "basa62-test-com-tls"
+      issuerRef = {
+        kind = "ClusterIssuer"
+        name = "vault-issuer"
+      }
+      commonName = "basa62.test.com"
+      dnsNames = [
+        "basa62.test.com",
+        "*.basa62.test.com",
+      ]
+    }
   }
 }
