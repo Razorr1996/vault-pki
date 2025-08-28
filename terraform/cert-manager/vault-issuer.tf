@@ -72,9 +72,9 @@ resource "kubernetes_role_binding_v1" "allow_sa_token_requests_cert_manager" {
 resource "kubernetes_manifest" "certificate" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
-    kind = "Certificate"
+    kind       = "Certificate"
     metadata = {
-      name = "basa62-test-com"
+      name      = "basa62-test-com"
       namespace = "default"
     }
     spec = {
