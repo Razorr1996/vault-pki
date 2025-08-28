@@ -23,10 +23,7 @@ Docs:
 
 1. Apply base terraform:
    ```shell
-   (
-     cd terraform/base
-     terragrunt apply -auto-approve
-   )
+   TG_WORKING_DIR=terraform/base terragrunt apply -auto-approve
    ```
 
 1. Init Vault:
@@ -41,10 +38,7 @@ Docs:
 
 1. Apply init Vault configuration:
    ```shell
-   (
-     cd terraform/vault
-     terragrunt apply -auto-approve -var signed=false
-   )
+   TG_WORKING_DIR=terraform/vault terragrunt apply -auto-approve -var signed=false
    ```
 
 1. Generate Root CA and sign `Intermediate CA1 v1` for Vault:
@@ -54,10 +48,7 @@ Docs:
 
 1. Apply the remaining Vault terraform config:
    ```shell
-   (
-     cd terraform/vault
-     terragrunt apply -auto-approve
-   )
+   TG_WORKING_DIR=terraform/vault terragrunt apply -auto-approve
    ```
 
 1. Test signed certificate from Vault `Intermediate CA2 v1.1`:
@@ -70,11 +61,24 @@ Docs:
 
 1. Apply cert-manager ClusterIssuer:
    ```shell
-   (
-     cd terraform/cert-manager
-     terragrunt apply -auto-approve
-   )
+   TG_WORKING_DIR=terraform/cert-manager terragrunt apply -auto-approve
    ```
+
+1. Wait and check Certificate:
+   ```shell
+   kubectl --context vault-pki -n default wait --for=condition=Ready=true cert/basa62-test-com
+   CERTIFICATE=$(
+     kubectl --context vault-pki -n default get secret basa62-test-com-tls -o jsonpath='{.data.tls\.crt}' | base64 -d;
+     # kubectl --context vault-pki -n default get secret basa62-test-com-tls -o jsonpath='{.data.ca\.crt}' | base64 -d; # Maybe we don't need Root CA in server chain
+   )
+   KEY=$(kubectl --context vault-pki -n default get secret basa62-test-com-tls -o jsonpath='{.data.tls\.key}' | base64 -d)
+   echo "$CERTIFICATE" | openssl storeutl -noout -text /dev/stdin
+   echo "$CERTIFICATE" | openssl x509 -dates -noout -issuer -subject
+   echo "$CERTIFICATE" | openssl x509 -modulus -noout | openssl md5
+   echo "$KEY" | openssl rsa -modulus -noout | openssl md5
+   ```
+   > cert-manager intentionally avoids adding root certificates to `tls.crt`, because they are useless in a situation where TLS is being done securely. For more information, see [RFC 5246 section 7.4.2](https://datatracker.ietf.org/doc/html/rfc5246#section-7.4.2) which contains the following explanation:
+   > > Because certificate validation requires that root keys be distributed independently, the self-signed certificate that specifies the root certificate authority MAY be omitted from the chain, under the assumption that the remote end must already possess it in order to validate it in any case.
 
 # Continue after restart Vault pods
 
