@@ -10,6 +10,10 @@ KUBECTL="kubectl --context vault-pki --namespace vault"
 
 CLUSTER_KEYS_JSON="$OUT_DIR/cluster-keys.json"
 
+$KUBECTL wait --for=jsonpath='{.status.phase}'=Running pod/vault-0
+$KUBECTL wait --for=jsonpath='{.status.phase}'=Running pod/vault-1
+$KUBECTL wait --for=jsonpath='{.status.phase}'=Running pod/vault-2
+
 $KUBECTL exec vault-0 -- \
     vault operator init \
     -key-shares=1 \

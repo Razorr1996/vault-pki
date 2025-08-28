@@ -88,6 +88,8 @@ resource "kubernetes_manifest" "certificate" {
         "basa62.test.com",
         "*.basa62.test.com",
       ]
+      # duration = "1h"
+      # renewBefore = "59m"
     }
   }
 }
