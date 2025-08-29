@@ -8,8 +8,30 @@ resource "vault_kubernetes_auth_backend_config" "kubernetes" {
 }
 
 resource "vault_policy" "pki" {
-  name   = "pki"
-  policy = file("${path.module}/config/pki-policy.hcl")
+  name = "pki"
+
+  # language=hcl
+  policy = <<-EOF
+    path "pki*" {
+      capabilities = [
+        "read",
+        "list",
+      ]
+    }
+
+    path "${vault_mount.test_org_v1_ica2_v1.path}/sign/${vault_pki_secret_backend_role.role.name}" {
+      capabilities = [
+        "create",
+        "update",
+      ]
+    }
+
+    path "${vault_mount.test_org_v1_ica2_v1.path}/issue/${vault_pki_secret_backend_role.role.name}" {
+      capabilities = [
+        "create",
+      ]
+    }
+  EOF
 }
 
 resource "vault_kubernetes_auth_backend_role" "cert_manager" {
