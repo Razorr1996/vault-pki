@@ -16,7 +16,7 @@ Docs:
 
 ## Installation
 
-1. Initialize minikube
+1. Create and pre-configure minikube cluster:
    ```shell
    ./scripts/00_minikube.sh
    ```
@@ -59,7 +59,7 @@ Docs:
    common_name=1.test.com | jq .data.certificate -r | openssl x509 -in /dev/stdin -text -noout
    ```
 
-1. Apply cert-manager ClusterIssuer:
+1. Apply cert-manager ClusterIssuer configuration and test Certificate:
    ```shell
    TG_WORKING_DIR=terraform/cert-manager terragrunt apply -auto-approve
    ```
@@ -90,7 +90,7 @@ Docs:
 
 # Cleanup
 
-1. Delete generated Vault secrets and certificates
+1. Delete minikube cluster, generated Vault secrets and certificates:
    ```shell
    minikube delete -p vault-pki
    docker network rm vault-pki || true
