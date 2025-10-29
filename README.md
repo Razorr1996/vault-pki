@@ -9,7 +9,7 @@ Docs:
 # Prerequisites
 
 1. [minikube](https://minikube.sigs.k8s.io/docs/start/)
-2. [tenv](https://github.com/tofuutils/tenv?tab=readme-ov-file#automatic-installation) / terragrunt + opentofu
+2. [tenv](https://github.com/tofuutils/tenv?tab=readme-ov-file#automatic-installation) / terragrunt + terraform
 4. [jq](https://jqlang.org/download/)
 5. [certstrap](https://formulae.brew.sh/formula/certstrap)
 6. [vault](https://developer.hashicorp.com/vault/tutorials/get-started/install-binary#install-vault) (optional for local testing requests)
