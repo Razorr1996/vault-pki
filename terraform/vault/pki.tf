@@ -122,7 +122,7 @@ resource "vault_pki_secret_backend_root_sign_intermediate" "test_org_v1_sign_ica
   country              = "RS"
   locality             = "Company1"
   province             = "GB"
-  max_path_length      = 1
+  max_path_length      = 0
   ttl                  = local.default_1y_in_sec
 }
 
