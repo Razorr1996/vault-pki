@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-# set -x # print cmd
 
-minikube start -p vault-pki
+MINIKUBE_PROFILE=vault-pki
 
-kubectl --context vault-pki create ns terraform
+minikube start --profile="$MINIKUBE_PROFILE" --addons=metrics-server
+
+kubectl --context "$MINIKUBE_PROFILE" create ns terraform
